@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <title>welcome{{ email }}</title>
+</head>
+<body bgcolor="#87ceeb">
+<h3 align="right"><button><a href="/logout/">LOGOUT</a> </button></h3>
+<h1 align="center">WELCOME <br>{{ user }}</h1>
+
+<form action="/add/" method="post">
+    {% csrf_token %}
+<table style="float: left" border="2">
+    <tr><td><select name="expense" style="background-color: #87ceeb">
+        <option>Hangout</option>
+        <option>Trip</option>
+        <option>Dinner</option>
+        <option>Others</option>
+    </select></td></tr>
+<tr><td><input type="number" placeholder="cost" name="cost" style="background-color: #87ceeb"></td></tr>
+<tr><td><input type="date" name="date" style="background-color: #87ceeb"></td></tr>
+   {% for x in data.values %}
+       <tr>
+              <td><input type="checkbox" name="mails" value={{ x.email }}>{{ x.name }}</td>
+        </tr>
+    {% endfor %}
+    <tr><td><input type="submit" value="ADD"></td></tr>
+    <tr><td>{{ msg }}</td></tr>
+</table>
+</form>
+
+<form action="/get_data/" method="post">
+        {% csrf_token %}
+    <table style="float: right" border="2">
+        <th colspan="5">ALL EXPENSES</th>
+    <tr><td colspan="2"><input type="date" name="from" style="background-color: #87ceeb"></td>
+        <td colspan="2"><input type="date" name="to" style="background-color: #87ceeb"></td>
+        <td><input type="submit" value="GET"></td></tr>
+    <tr>
+        <td>S.NO</td>
+        <td>EMAIL</td>
+        <td>EXPENSE</td>
+        <td>DATE</td>
+        <td>COST</td>
+    </tr>
+    {% for a in ex %}
+        <tr><td>{{ a.id}}</td>
+            <td>{{ a.email_id}}</td>
+            <td>{{ a.expense}}</td>
+            <td>{{ a.date}}</td>
+            <td>{{ a.cost}}</td>
+        </tr>
+    {% endfor %}
+    <tr><td colspan="5" align="center">{{ error }}</td></tr>
+</table>
+</form>
+
+<form action="/get_my_data/" method="post">
+        {% csrf_token %}
+    <table style="float: right" border="2">
+        <th colspan="6">MY EXPENSES</th>
+    <tr><td colspan="2"><input type="date" name="start" style="background-color: #87ceeb"></td>
+        <td colspan="2"><input type="date" name="end" style="background-color: #87ceeb"></td>
+        <td colspan="2"><input type="hidden" value={{ user }} name="email"  style="background-color: #87ceeb"></td>
+        <td><input type="submit" value="GET"></td></tr>
+        <td>{{ error }}</td>
+    <tr>
+        <td>ID.NO</td>
+        <td>EXPENSE</td>
+        <td>DATE</td>
+        <td>COST</td>
+    </tr>
+            {% for i in my_exp %}
+        <tr><td>{{ i.id}}</td>
+            <td>{{ i.email_id}}</td>
+            <td>{{ i.expense}}</td>
+            <td>{{ i.date}}</td>
+            <td>{{ i.cost}}</td>
+        </tr>
+    {% endfor %}
+</table>
+</form>
+
+</body>
+</html>
